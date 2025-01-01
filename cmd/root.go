@@ -73,6 +73,7 @@ func runNavidrome(ctx context.Context) {
 
 	g, ctx := errgroup.WithContext(ctx)
 	g.Go(startServer(ctx))
+	g.Go(startDLNAServer(ctx))
 	g.Go(startSignaller(ctx))
 	g.Go(startScheduler(ctx))
 	g.Go(startPlaybackServer(ctx))
@@ -120,6 +121,13 @@ func startServer(ctx context.Context) func() error {
 		if strings.HasPrefix(conf.Server.UILoginBackgroundURL, "/") {
 			a.MountRouter("Background images", conf.Server.UILoginBackgroundURL, backgrounds.NewHandler())
 		}
+		return a.Run(ctx, conf.Server.Address, conf.Server.Port, conf.Server.TLSCert, conf.Server.TLSKey)
+	}
+}
+
+func startDLNAServer(ctx context.Context) func() error {
+	return func() error {
+		a := CreateDLNAServer()
 		return a.Run(ctx, conf.Server.Address, conf.Server.Port, conf.Server.TLSCert, conf.Server.TLSKey)
 	}
 }
