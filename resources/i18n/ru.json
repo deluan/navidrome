@@ -135,11 +135,11 @@
       }
     },
     "transcoding": {
-      "name": "Транскодирование |||| Транскодирование",
+      "name": "Транскодирование  |||| Транскодирование",
       "fields": {
         "name": "Название",
         "targetFormat": "Целевой формат",
-        "defaultBitRate": "Стандартный битрейт",
+        "defaultBitRate": "Битрейт по умолчанию",
         "command": "Команда"
       }
     },
@@ -183,9 +183,9 @@
       }
     },
     "share": {
-      "name": "Ссылка доступа |||| Ссылки доступа",
+      "name": "Общий доступ |||| Общий доступ",
       "fields": {
-        "username": "Кто поделился",
+        "username": "Поделился",
         "url": "Ссылка",
         "description": "Описание",
         "contents": "Содержание",
@@ -194,9 +194,9 @@
         "visitCount": "Посещения",
         "format": "Формат",
         "maxBitRate": "Макс. Битрейт",
-        "updatedAt": "Обновлено",
+        "updatedAt": "Обновлено в",
         "createdAt": "Создано",
-        "downloadable": "Разрешить скачивание?"
+        "downloadable": "Разрешить загрузку?"
       }
     }
   },
@@ -213,7 +213,7 @@
       "sign_in": "Войти",
       "sign_in_error": "Ошибка аутентификации, попробуйте снова",
       "logout": "Выйти",
-      "insightsCollectionNote": "Navidrome собирает анонимные данные об использовании для\nулучшения проекта. Нажмите [здесь], чтобы\nузнать больше или отказаться"
+      "insightsCollectionNote": ""
     },
     "validation": {
       "invalidChars": "Пожалуйста, используйте только буквы и цифры",
@@ -389,7 +389,6 @@
         "language": "Язык",
         "defaultView": "Вид по умолчанию",
         "desktop_notifications": "Уведомления на рабочем столе",
-        "lastfmNotConfigured": "API-ключ Last.fm не настроен",
         "lastfmScrobbling": "Скробблинг Last.fm",
         "listenBrainzScrobbling": "Скробблинг ListenBrainz",
         "replaygain": "ReplayGain режим",
@@ -398,7 +397,8 @@
           "none": "Отключить",
           "album": "Использовать усиление альбома",
           "track": "Использовать усиление трека"
-        }
+        },
+        "lastfmNotConfigured": ""
       }
     },
     "albumList": "Альбомы",
@@ -435,12 +435,12 @@
     "links": {
       "homepage": "Главная",
       "source": "Код",
-      "featureRequests": "Предложения"
-    },
-    "lastInsightsCollection": "Последний сбор данных",
-    "insights": {
-      "disabled": "Отключено",
-      "waiting": "Пока нет"
+      "featureRequests": "Предложения",
+      "lastInsightsCollection": "",
+      "insights": {
+        "disabled": "",
+        "waiting": ""
+      }
     }
   },
   "activity": {
