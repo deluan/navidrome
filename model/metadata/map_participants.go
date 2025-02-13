@@ -17,16 +17,16 @@ type roleTags struct {
 }
 
 var roleMappings = map[model.Role]roleTags{
-	model.RoleComposer:  {name: model.TagComposer, sort: model.TagComposerSort},
-	model.RoleLyricist:  {name: model.TagLyricist, sort: model.TagLyricistSort},
-	model.RoleConductor: {name: model.TagConductor},
-	model.RoleArranger:  {name: model.TagArranger},
-	model.RoleDirector:  {name: model.TagDirector},
-	model.RoleProducer:  {name: model.TagProducer},
-	model.RoleEngineer:  {name: model.TagEngineer},
-	model.RoleMixer:     {name: model.TagMixer},
-	model.RoleRemixer:   {name: model.TagRemixer},
-	model.RoleDJMixer:   {name: model.TagDJMixer},
+	model.RoleComposer:  {name: model.TagComposer, sort: model.TagComposerSort, mbid: model.TagMusicBrainzComposerID},
+	model.RoleLyricist:  {name: model.TagLyricist, sort: model.TagLyricistSort, mbid: model.TagMusicBrainzLyricistID},
+	model.RoleConductor: {name: model.TagConductor, mbid: model.TagMusicBrainzConductorID},
+	model.RoleArranger:  {name: model.TagArranger, mbid: model.TagMusicBrainzArrangerID},
+	model.RoleDirector:  {name: model.TagDirector, mbid: model.TagMusicBrainzDirectorID},
+	model.RoleProducer:  {name: model.TagProducer, mbid: model.TagMusicBrainzProducerID},
+	model.RoleEngineer:  {name: model.TagEngineer, mbid: model.TagMusicBrainzEngineerID},
+	model.RoleMixer:     {name: model.TagMixer, mbid: model.TagMusicBrainzMixerID},
+	model.RoleRemixer:   {name: model.TagRemixer, mbid: model.TagMusicBrainzRemixerID},
+	model.RoleDJMixer:   {name: model.TagDJMixer, mbid: model.TagMusicBrainzDJMixerID},
 }
 
 func (md Metadata) mapParticipants() model.Participants {
@@ -60,17 +60,58 @@ func (md Metadata) mapParticipants() model.Participants {
 
 	titleCaser := cases.Title(language.Und)
 
-	// Parse performers
-	for _, performer := range md.Pairs(model.TagPerformer) {
-		name := performer.Value()
-		id := md.artistID(name)
-		orderName := str.SanitizeFieldForSortingNoArticle(name)
-		subRole := titleCaser.String(performer.Key())
-		participants.AddWithSubRole(model.RolePerformer, subRole, model.Artist{
-			ID:              id,
-			Name:            name,
-			OrderArtistName: orderName,
-		})
+	rolesMbzIdMap := make(map[string][]string)
+
+	for _, performerMbid := range md.Pairs(model.TagMusicBrainzPerformerID) {
+		id := performerMbid.Value()
+		role := titleCaser.String(performerMbid.Key())
+		rolesMbzIdMap[role] = append(rolesMbzIdMap[role], id)
+	}
+
+	if len(rolesMbzIdMap) > 0 {
+		roleIdx := make(map[string]int, len(rolesMbzIdMap))
+		for role := range rolesMbzIdMap {
+			roleIdx[role] = 0
+		}
+
+		// Parse performers
+		for _, performer := range md.Pairs(model.TagPerformer) {
+			name := performer.Value()
+			id := md.artistID(name)
+			orderName := str.SanitizeFieldForSortingNoArticle(name)
+			subRole := titleCaser.String(performer.Key())
+
+			mbids, ok := rolesMbzIdMap[subRole]
+
+			var mbid string
+
+			if ok && roleIdx[subRole] < len(mbids) {
+				mbid = mbids[roleIdx[subRole]]
+				roleIdx[subRole] += 1
+			} else {
+				mbid = ""
+			}
+
+			participants.AddWithSubRole(model.RolePerformer, subRole, model.Artist{
+				ID:              id,
+				MbzArtistID:     mbid,
+				Name:            name,
+				OrderArtistName: orderName,
+			})
+		}
+	} else {
+		// Parse performers
+		for _, performer := range md.Pairs(model.TagPerformer) {
+			name := performer.Value()
+			id := md.artistID(name)
+			orderName := str.SanitizeFieldForSortingNoArticle(name)
+			subRole := titleCaser.String(performer.Key())
+			participants.AddWithSubRole(model.RolePerformer, subRole, model.Artist{
+				ID:              id,
+				Name:            name,
+				OrderArtistName: orderName,
+			})
+		}
 	}
 
 	// Create a map to store the MbzArtistID for each artist name
