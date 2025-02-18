@@ -212,7 +212,8 @@
       "password": "パスワード",
       "sign_in": "ログイン",
       "sign_in_error": "認証に失敗しました。入力を確認してください",
-      "logout": "ログアウト"
+      "logout": "ログアウト",
+      "insightsCollectionNote": "Navidromeでは、プロジェクトの改善に役立てるため、匿名の利用データを収集しています。詳しくは [here] をクリックしてください。"
     },
     "validation": {
       "invalidChars": "文字と数字のみを使用してください",
@@ -396,7 +397,8 @@
           "none": "無効",
           "album": "アルバムゲインを使う",
           "track": "トラックゲインを使う"
-        }
+        },
+        "lastfmNotConfigured": "Last.fmのAPIキーが設定されていません"
       }
     },
     "albumList": "アルバム",
@@ -433,7 +435,12 @@
     "links": {
       "homepage": "ホームページ",
       "source": "ソースコード",
-      "featureRequests": "機能リクエスト"
+      "featureRequests": "機能リクエスト",
+      "lastInsightsCollection": "最後のデータ収集",
+      "insights": {
+        "disabled": "無効",
+        "waiting": "待機中"
+      }
     }
   },
   "activity": {
